@@ -1,141 +1,182 @@
-![Isaac Lab](docs/source/_static/isaaclab.jpg)
+# IsaacLab — Energy-Penalty Extension
+
+> **Thesis project** — *How do different energy-efficient reward functions impact the learning speed and success rate of robotic systems in grasping tasks?*
+> Su Acar · Tilburg University · Cognitive Science & Artificial Intelligence · 2026
+
+This repository is a fork of [isaac-sim/IsaacLab](https://github.com/isaac-sim/IsaacLab) extended with energy-aware reward shaping for robotic grasping research. It trains a **Franka Emika Panda** arm using **Proximal Policy Optimization (PPO)** and compares three reward configurations that progressively introduce energy-consumption penalties derived from joint torque and motion smoothness (jerk).
 
 ---
 
-# Isaac Lab
+## Table of Contents
 
-[![IsaacSim](https://img.shields.io/badge/IsaacSim-5.1.0-silver.svg)](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html)
-[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://docs.python.org/3/whatsnew/3.11.html)
-[![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/22.04/)
-[![Windows platform](https://img.shields.io/badge/platform-windows--64-orange.svg)](https://www.microsoft.com/en-us/)
-[![pre-commit](https://img.shields.io/github/actions/workflow/status/isaac-sim/IsaacLab/pre-commit.yaml?logo=pre-commit&logoColor=white&label=pre-commit&color=brightgreen)](https://github.com/isaac-sim/IsaacLab/actions/workflows/pre-commit.yaml)
-[![docs status](https://img.shields.io/github/actions/workflow/status/isaac-sim/IsaacLab/docs.yaml?label=docs&color=brightgreen)](https://github.com/isaac-sim/IsaacLab/actions/workflows/docs.yaml)
-[![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
+- [Overview](#overview)
+- [Reward Configurations](#reward-configurations)
+- [Repository Structure](#repository-structure)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Running Experiments](#running-experiments)
+- [Visualisation](#visualisation)
+- [Results](#results)
+- [Citation](#citation)
+- [License](#license)
 
+---
 
-**Isaac Lab** is a GPU-accelerated, open-source framework designed to unify and simplify robotics research workflows,
-such as reinforcement learning, imitation learning, and motion planning. Built on [NVIDIA Isaac Sim](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html),
-it combines fast and accurate physics and sensor simulation, making it an ideal choice for sim-to-real
-transfer in robotics.
+## Overview
 
-Isaac Lab provides developers with a range of essential features for accurate sensor simulation, such as RTX-based
-cameras, LIDAR, or contact sensors. The framework's GPU acceleration enables users to run complex simulations and
-computations faster, which is key for iterative processes like reinforcement learning and data-intensive tasks.
-Moreover, Isaac Lab can run locally or be distributed across the cloud, offering flexibility for large-scale deployments.
+Most reinforcement learning approaches for robotic manipulation optimise purely for task success. This project embeds simple, simulation-based energy proxies directly into the reward signal to investigate whether efficiency can be improved without significantly reducing grasp performance.
 
-A detailed description of Isaac Lab can be found in our [arXiv paper](https://arxiv.org/abs/2511.04831).
+**Research question:** How can energy-aware reward shaping influence learning efficiency, task success rate, and energy consumption of a Franka Panda arm in object-grasping tasks?
 
-## Key Features
+**Metrics tracked per configuration:**
+- Grasp success rate (% of episodes with a stable, completed grasp)
+- Learning speed (training steps to reach a stable success-rate threshold)
+- Energy proxy (average integrated joint torque + jerk per episode)
 
-Isaac Lab offers a comprehensive set of tools and environments designed to facilitate robot learning:
+---
 
-- **Robots**: A diverse collection of robots, from manipulators, quadrupeds, to humanoids, with more than 16 commonly available models.
-- **Environments**: Ready-to-train implementations of more than 30 environments, which can be trained with popular reinforcement learning frameworks such as RSL RL, SKRL, RL Games, or Stable Baselines. We also support multi-agent reinforcement learning.
-- **Physics**: Rigid bodies, articulated systems, deformable objects
-- **Sensors**: RGB/depth/segmentation cameras, camera annotations, IMU, contact sensors, ray casters.
+## Reward Configurations
 
+| ID | Name | Description |
+|----|------|-------------|
+| **C1** | Baseline | Grasp success reward only |
+| **C2** | Effort penalty | Grasp success + integrated joint-torque penalty |
+| **C3** | Effort + jerk penalty | Grasp success + joint-torque penalty + jerk-based smoothness penalty |
 
-## Getting Started
+Each configuration is trained multiple times to reduce variance. Averaged results are used for comparison.
 
-### Documentation
+---
 
-Our [documentation page](https://isaac-sim.github.io/IsaacLab) provides everything you need to get started, including
-detailed tutorials and step-by-step guides. Follow these links to learn more about:
+## Repository Structure
 
-- [Installation steps](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html#local-installation)
-- [Reinforcement learning](https://isaac-sim.github.io/IsaacLab/main/source/overview/reinforcement-learning/rl_existing_scripts.html)
-- [Tutorials](https://isaac-sim.github.io/IsaacLab/main/source/tutorials/index.html)
-- [Available environments](https://isaac-sim.github.io/IsaacLab/main/source/overview/environments.html)
+```
+IsaacLab-energypenalty/
+├── source/                  # Core IsaacLab source (upstream)
+│   └── ...
+├── scripts/                 # Training entry-points and experiment runners
+├── thesis_plots/
+│   └── baseline/            # Saved plots and training curves
+├── visualisation/           # Matplotlib-based analysis and plotting scripts
+├── docs/                    # Documentation (upstream + thesis additions)
+├── tools/                   # Helper utilities
+├── isaaclab.sh / .bat       # Environment launch scripts
+└── README.md
+```
 
+---
 
-## Isaac Sim Version Dependency
+## Requirements
 
-Isaac Lab is built on top of Isaac Sim and requires specific versions of Isaac Sim that are compatible with each
-release of Isaac Lab. Below, we outline the recent Isaac Lab releases and GitHub branches and their corresponding
-dependency versions for Isaac Sim.
+- **OS:** Ubuntu 22.04 (Linux x86-64)
+- **Python:** 3.11.x
+- **NVIDIA Isaac Sim:** 4.5 / 5.0 / 5.1 (see [version table](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html))
+- **GPU:** NVIDIA GPU with CUDA support (required for Isaac Sim)
 
-| Isaac Lab Version             | Isaac Sim Version         |
-| ----------------------------- | ------------------------- |
-| `main` branch                 | Isaac Sim 4.5 / 5.0 / 5.1 |
-| `v2.3.X`                      | Isaac Sim 4.5 / 5.0 / 5.1 |
-| `v2.2.X`                      | Isaac Sim 4.5 / 5.0       |
-| `v2.1.X`                      | Isaac Sim 4.5             |
-| `v2.0.X`                      | Isaac Sim 4.5             |
+Python dependencies (see `environment.yml` or `pyproject.toml`):
+- `torch`
+- `matplotlib`
+- `pandas`
+- `numpy`
 
+---
 
-## Contributing to Isaac Lab
+## Installation
 
-We wholeheartedly welcome contributions from the community to make this framework mature and useful for everyone.
-These may happen as bug reports, feature requests, or code contributions. For details, please check our
-[contribution guidelines](https://isaac-sim.github.io/IsaacLab/main/source/refs/contributing.html).
+1. **Install Isaac Sim** following the [official guide](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html).
 
-## Show & Tell: Share Your Inspiration
+2. **Clone this repository:**
+   ```bash
+   git clone https://github.com/thesuacar/IsaacLab-energypenalty.git
+   cd IsaacLab-energypenalty
+   ```
 
-We encourage you to utilize our [Show & Tell](https://github.com/isaac-sim/IsaacLab/discussions/categories/show-and-tell)
-area in the `Discussions` section of this repository. This space is designed for you to:
+3. **Set up the Isaac Lab environment:**
+   ```bash
+   # Linux
+   ./isaaclab.sh --install
 
-* Share the tutorials you've created
-* Showcase your learning content
-* Present exciting projects you've developed
+   # Windows
+   isaaclab.bat --install
+   ```
 
-By sharing your work, you'll inspire others and contribute to the collective knowledge
-of our community. Your contributions can spark new ideas and collaborations, fostering
-innovation in robotics and simulation.
+4. **Install additional dependencies:**
+   ```bash
+   pip install matplotlib pandas
+   ```
 
-## Troubleshooting
+---
 
-Please see the [troubleshooting](https://isaac-sim.github.io/IsaacLab/main/source/refs/troubleshooting.html) section for
-common fixes or [submit an issue](https://github.com/isaac-sim/IsaacLab/issues).
+## Running Experiments
 
-For issues related to Isaac Sim, we recommend checking its [documentation](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html)
-or opening a question on its [forums](https://forums.developer.nvidia.com/c/agx-autonomous-machines/isaac/67).
+Train each reward configuration from the `scripts/` directory. Replace `<config>` with `baseline`, `effort`, or `effort_jerk`.
 
-## Support
+```bash
+./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-<config> --num_envs 64
+```
 
-* Please use GitHub [Discussions](https://github.com/isaac-sim/IsaacLab/discussions) for discussing ideas,
-  asking questions, and requests for new features.
-* Github [Issues](https://github.com/isaac-sim/IsaacLab/issues) should only be used to track executable pieces of
-  work with a definite scope and a clear deliverable. These can be fixing bugs, documentation issues, new features,
-  or general updates.
+To run all three configurations sequentially:
+```bash
+for cfg in baseline effort effort_jerk; do
+    ./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-$cfg --num_envs 64
+done
+```
 
-## Connect with the NVIDIA Omniverse Community
+Training logs and checkpoints are saved to `logs/` by default.
 
-Do you have a project or resource you'd like to share more widely? We'd love to hear from you!
-Reach out to the NVIDIA Omniverse Community team at OmniverseCommunity@nvidia.com to explore opportunities
-to spotlight your work.
+---
 
-You can also join the conversation on the [Omniverse Discord](https://discord.com/invite/nvidiaomniverse) to
-connect with other developers, share your projects, and help grow a vibrant, collaborative ecosystem
-where creativity and technology intersect. Your contributions can make a meaningful impact on the Isaac Lab
-community and beyond!
+## Visualisation
 
-## License
+After training, generate comparison plots using the scripts in `visualisation/`:
 
-The Isaac Lab framework is released under [BSD-3 License](LICENSE). The `isaaclab_mimic` extension and its
-corresponding standalone scripts are released under [Apache 2.0](LICENSE-mimic). The license files of its
-dependencies and assets are present in the [`docs/licenses`](docs/licenses) directory.
+```bash
+python visualisation/plot_results.py --log_dir logs/
+```
 
-Note that Isaac Lab requires Isaac Sim, which includes components under proprietary licensing terms. Please see the [Isaac Sim license](docs/licenses/dependencies/isaacsim-license.txt) for information on Isaac Sim licensing.
+Pre-generated plots from thesis runs are available in `thesis_plots/baseline/`.
 
-Note that the `isaaclab_mimic` extension requires cuRobo, which has proprietary licensing terms that can be found in [`docs/licenses/dependencies/cuRobo-license.txt`](docs/licenses/dependencies/cuRobo-license.txt).
+---
 
+## Results
+
+Full results, training curves, and analysis are presented in the thesis document. The `thesis_plots/` directory contains the figures used in the final report.
+
+---
+
+## Acknowledgements
+The baseline training code was developed together with Andrei Vasile at Tilburg University (2026).
 
 ## Citation
 
-If you use Isaac Lab in your research, please cite the technical report:
+If you use this work, please cite both this project and the upstream Isaac Lab framework:
 
-```
-@article{mittal2025isaaclab,
-  title={Isaac Lab: A GPU-Accelerated Simulation Framework for Multi-Modal Robot Learning},
-  author={Mayank Mittal and Pascal Roth and James Tigue and Antoine Richard and Octi Zhang and Peter Du and Antonio Serrano-Muñoz and Xinjie Yao and René Zurbrügg and Nikita Rudin and Lukasz Wawrzyniak and Milad Rakhsha and Alain Denzler and Eric Heiden and Ales Borovicka and Ossama Ahmed and Iretiayo Akinola and Abrar Anwar and Mark T. Carlson and Ji Yuan Feng and Animesh Garg and Renato Gasoto and Lionel Gulich and Yijie Guo and M. Gussert and Alex Hansen and Mihir Kulkarni and Chenran Li and Wei Liu and Viktor Makoviychuk and Grzegorz Malczyk and Hammad Mazhar and Masoud Moghani and Adithyavairavan Murali and Michael Noseworthy and Alexander Poddubny and Nathan Ratliff and Welf Rehberg and Clemens Schwarke and Ritvik Singh and James Latham Smith and Bingjie Tang and Ruchik Thaker and Matthew Trepte and Karl Van Wyk and Fangzhou Yu and Alex Millane and Vikram Ramasamy and Remo Steiner and Sangeeta Subramanian and Clemens Volk and CY Chen and Neel Jawale and Ashwin Varghese Kuruttukulam and Michael A. Lin and Ajay Mandlekar and Karsten Patzwaldt and John Welsh and Huihua Zhao and Fatima Anes and Jean-Francois Lafleche and Nicolas Moënne-Loccoz and Soowan Park and Rob Stepinski and Dirk Van Gelder and Chris Amevor and Jan Carius and Jumyung Chang and Anka He Chen and Pablo de Heras Ciechomski and Gilles Daviet and Mohammad Mohajerani and Julia von Muralt and Viktor Reutskyy and Michael Sauter and Simon Schirm and Eric L. Shi and Pierre Terdiman and Kenny Vilella and Tobias Widmer and Gordon Yeoman and Tiffany Chen and Sergey Grizan and Cathy Li and Lotus Li and Connor Smith and Rafael Wiltz and Kostas Alexis and Yan Chang and David Chu and Linxi "Jim" Fan and Farbod Farshidian and Ankur Handa and Spencer Huang and Marco Hutter and Yashraj Narang and Soha Pouya and Shiwei Sheng and Yuke Zhu and Miles Macklin and Adam Moravanszky and Philipp Reist and Yunrong Guo and David Hoeller and Gavriel State},
-  journal={arXiv preprint arXiv:2511.04831},
-  year={2025},
-  url={https://arxiv.org/abs/2511.04831}
+**This project:**
+```bibtex
+@misc{acar2026energypenalty,
+  author       = {Su Acar},
+  title        = {IsaacLab-energypenalty: Energy-Aware Reward Shaping for Robotic Grasping},
+  year         = {2026},
+  howpublished = {\url{https://github.com/thesuacar/IsaacLab-energypenalty}},
+  note         = {BSc Thesis, Tilburg University}
 }
 ```
 
-## Acknowledgement
+**Upstream Isaac Lab:**
+```bibtex
+@article{mittal2025isaaclab,
+  title   = {Isaac Lab: A GPU-Accelerated Simulation Framework for Multi-Modal Robot Learning},
+  author  = {Mayank Mittal et al.},
+  journal = {arXiv preprint arXiv:2511.04831},
+  year    = {2025},
+  url     = {https://arxiv.org/abs/2511.04831}
+}
+```
 
-Isaac Lab development initiated from the [Orbit](https://isaac-orbit.github.io/) framework.
-We gratefully acknowledge the authors of Orbit for their foundational contributions.
+---
+
+## License
+
+The Isaac Lab framework (and this fork) is released under the [BSD-3-Clause License].
+Thesis-specific additions in this fork are also released under BSD-3-Clause.
+
+Note: this project depends on NVIDIA Isaac Sim, which has its own proprietary licensing terms — see Isaac Sim documentation.
