@@ -11,7 +11,7 @@ from . import agents
 ##
 
 ##
-# Joint Position Control
+# Joint Position Control (Baseline)
 ##
 
 gym.register(
@@ -76,11 +76,32 @@ gym.register(
     disable_env_checker=True,
 )
 
+##
+# Config 2 — Joint Effort Penalty
+##
+
 gym.register(
     id="Isaac-Lift-Cube-Franka-JointEffort-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     kwargs={
         "env_cfg_entry_point": f"{__name__}.joint_effort_env_cfg:FrankaCubeLiftJointEffortEnvCfg",
+        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:LiftCubePPORunnerCfg",
+        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_ppo_cfg.yaml",
+        "sb3_cfg_entry_point": f"{agents.__name__}:sb3_ppo_cfg.yaml",
+    },
+    disable_env_checker=True,
+)
+
+##
+# Config 3 — Joint Effort + Jerk Penalty
+##
+
+gym.register(
+    id="Isaac-Lift-Cube-Franka-JointEffortAndJerk-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    kwargs={
+        "env_cfg_entry_point": f"{__name__}.joint_effort_and_jerk_env_cfg:FrankaCubeLiftJointEffortAndJerkEnvCfg",
         "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:LiftCubePPORunnerCfg",
         "skrl_cfg_entry_point": f"{agents.__name__}:skrl_ppo_cfg.yaml",
