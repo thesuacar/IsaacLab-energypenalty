@@ -57,14 +57,14 @@ params:
     value_bootstrap: False
     num_actors: -1
     reward_shaper:
-      scale_value: 0.01
+      scale_value: 1.0 #fixes penalty magnitude
     normalize_advantage: True
     gamma: 0.99
     tau: 0.95
-    learning_rate: 1e-4
+    learning_rate: 5e-4 #matches nvidia reference
     lr_schedule: adaptive
     schedule_type: legacy
-    kl_threshold: 0.01
+    kl_threshold: 0.016 #matches nvidia reference
     score_to_win: 100000000
     max_epochs: 1500
     save_best_after: 100
@@ -75,8 +75,8 @@ params:
     truncate_grads: True
     e_clip: 0.2
     horizon_length: 24
-    minibatch_size: 1536
-    mini_epochs: 8
+    minibatch_size: 24576 #set to num_envs × horizon / 4 = 98304/4
+    mini_epochs: 4 #matches nvidia reference
     critic_coef: 4
     clip_value: True
     clip_actions: False

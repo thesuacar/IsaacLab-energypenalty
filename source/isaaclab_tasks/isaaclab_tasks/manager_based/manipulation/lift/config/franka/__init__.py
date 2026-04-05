@@ -76,6 +76,9 @@ gym.register(
     disable_env_checker=True,
 )
 
+'''
+INSERT HERE YOUR OWN CONFIGURATIONS TO REGISTER THEM AS GYM ENVIRONMENTS.'''
+
 ##
 # Config 2 — Joint Effort Penalty
 ##
