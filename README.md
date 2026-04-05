@@ -111,13 +111,13 @@ Python dependencies (see `environment.yml` or `pyproject.toml`):
 Train each reward configuration from the `scripts/` directory. Replace `<config>` with `baseline`, `effort`, or `effort_jerk`.
 
 ```bash
-./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-<config> --num_envs 64
+./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-<config> --num_envs 4096
 ```
 
 To run all three configurations sequentially:
 ```bash
 for cfg in baseline effort effort_jerk; do
-    ./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-$cfg --num_envs 64
+    ./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-$cfg --num_envs 4096
 done
 ```
 
