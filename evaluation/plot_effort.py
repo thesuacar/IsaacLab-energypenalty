@@ -3,11 +3,6 @@ Config 2 — Joint Effort Penalty Results Plotter
 Reads TensorBoard event files from Isaac Lab training runs and produces
 publication-ready comparison graphs for all 3 seeds.
 
-Usage:
-    python plot_config2.py
-
-Output:
-    Plots saved to ~/IsaacLab/thesis_plots/config2/
 """
 
 import os
@@ -18,12 +13,12 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LOG_BASE = os.path.expanduser("~/IsaacLab/logs/rl_games/franka_lift/config2")
+LOG_BASE = os.path.expanduser("~/IsaacLab-energypenalty/logs/rl_games/franka_lift")
 
 RUNS = {
-    "Seed 42":  "SEED42",
-    "Seed 123": "SEED123",
-    "Seed 456": "SEED456",
+    "Seed 42":  "joineffort42",
+    "Seed 123": "joineffort123",
+    "Seed 456": "joineffort456",
 }
 
 # Metrics to plot — (TensorBoard tag, plot title, y-axis label)
@@ -38,7 +33,7 @@ METRICS = [
     ("Episode/Curriculum/joint_vel",                "Curriculum: Joint Velocity Weight", "Weight"),
 ]
 
-OUTPUT_DIR = os.path.expanduser("~/IsaacLab/thesis_plots/config2")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "joineffort")
 COLORS     = ["#4C72B0", "#DD8452", "#55A868"]   # blue, orange, green
 SMOOTH_WEIGHT = 0.85
 

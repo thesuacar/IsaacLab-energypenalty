@@ -4,7 +4,7 @@ Reads TensorBoard event files from Isaac Lab training runs and produces
 publication-ready comparison graphs for all 3 seeds.
 
 Usage:
-    python plot_baseline_results.py
+    python plot_baseline.py
 
 Output:
     A folder called 'thesis_plots/' with PNG files for each metric.
@@ -19,12 +19,12 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 # ── Configuration ────────────────────────────────────────────────────────────
 
 # Update these paths if your folder names are different
-LOG_BASE = os.path.expanduser("~/IsaacLab/logs/rl_games/franka_lift")
+LOG_BASE = os.path.expanduser("~/IsaacLab-energypenalty/logs/rl_games/franka_lift")
 
 RUNS = {
-    "Seed 42":  "2026-03-06_18-14-35",
-    "Seed 123": "2026-03-06_18-40-55",
-    "Seed 456": "2026-03-06_19-02-58",
+    "Seed 42":  "baseline42",
+    "Seed 123": "baseline123",
+    "Seed 456": "baseline456",
 }
 
 # Metrics to plot — (TensorBoard tag, plot title, y-axis label)
@@ -38,7 +38,7 @@ METRICS = [
     ("Episode/Curriculum/joint_vel",          "Curriculum: Joint Velocity Weight",  "Weight"),
 ]
 
-OUTPUT_DIR = "thesis_plots"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "baseline")
 COLORS = ["#4C72B0", "#DD8452", "#55A868"]  # blue, orange, green
 SMOOTH_WEIGHT = 0.85  # exponential moving average smoothing (0=none, 0.99=max)
 

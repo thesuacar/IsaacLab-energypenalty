@@ -8,37 +8,6 @@
 # proxy (integrated torque L2 norm) per episode.
 # =============================================================================
 
-'''
-To run baseline:
-cd ~/IsaacLab
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/baseline/SEED42/nn/franka_lift.pth \
-  --label baseline_seed42 --num_envs 16 --num_episodes 50 --headless
-
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/baseline/SEED123/nn/franka_lift.pth \
-  --label baseline_seed123 --num_envs 16 --num_episodes 50 --headless
-
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/baseline/SEED456/nn/franka_lift.pth \
-  --label baseline_seed456 --num_envs 16 --num_episodes 50 --headless
-'''
-
-'''
-To run config2:
-cd ~/IsaacLab
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/config2/SEED42/nn/franka_lift.pth \
-  --label config2_seed42 --num_envs 16 --num_episodes 50 --headless
-
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/config2/SEED123/nn/franka_lift.pth \
-  --label config2_seed123 --num_envs 16 --num_episodes 50 --headless
-
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 \
-  --checkpoint logs/rl_games/franka_lift/config2/SEED456/nn/franka_lift.pth \
-  --label config2_seed456 --num_envs 16 --num_episodes 50 --headless
-'''
 
 import argparse
 import os

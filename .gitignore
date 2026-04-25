@@ -42,7 +42,6 @@ docker/.container.cfg
 **/.neptune/*
 docker/artifacts/
 *.tmp
-**/thesis_plots/**
 
 # Doc Outputs
 **/docs/_build/*

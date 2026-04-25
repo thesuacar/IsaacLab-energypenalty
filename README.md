@@ -11,11 +11,7 @@ This repository is a fork of [isaac-sim/IsaacLab](https://github.com/isaac-sim/I
 
 - [Overview](#overview)
 - [Reward Configurations](#reward-configurations)
-- [Repository Structure](#repository-structure)
 - [Requirements](#requirements)
-- [Installation](#installation)
-- [Running Experiments](#running-experiments)
-- [Visualisation](#visualisation)
 - [Results](#results)
 - [Citation](#citation)
 - [License](#license)
@@ -45,97 +41,25 @@ Most reinforcement learning approaches for robotic manipulation optimise purely 
 
 Each configuration is trained multiple times to reduce variance. Averaged results are used for comparison.
 
----
-
-## Repository Structure
-
-```
-IsaacLab-energypenalty/
-├── source/                  # Core IsaacLab source (upstream)
-│   └── ...
-├── scripts/                 # Training entry-points and experiment runners
-├── thesis_plots/
-│   └── baseline/            # Saved plots and training curves
-├── visualisation/           # Matplotlib-based analysis and plotting scripts
-├── docs/                    # Documentation (upstream + thesis additions)
-├── tools/                   # Helper utilities
-├── isaaclab.sh / .bat       # Environment launch scripts
-└── README.md
-```
 
 ---
 
 ## Requirements
 
-- **OS:** Ubuntu 22.04 (Linux x86-64)
-- **Python:** 3.11.x
-- **NVIDIA Isaac Sim:** 4.5 / 5.0 / 5.1 (see [version table](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html))
-- **GPU:** NVIDIA GPU with CUDA support (required for Isaac Sim)
-
-Python dependencies (see `environment.yml` or `pyproject.toml`):
-- `torch`
-- `matplotlib`
-- `pandas`
-- `numpy`
-
----
-
-## Installation
-
-1. **Install Isaac Sim** following the [official guide](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html).
-
-2. **Clone this repository:**
-   ```bash
-   git clone https://github.com/thesuacar/IsaacLab-energypenalty.git
-   cd IsaacLab-energypenalty
-   ```
-
-3. **Set up the Isaac Lab environment:**
-   ```bash
-   # Linux
-   ./isaaclab.sh --install
-
-   # Windows
-   isaaclab.bat --install
-   ```
-
-4. **Install additional dependencies:**
-   ```bash
-   pip install matplotlib pandas
-   ```
+| Component | Requirement |
+|-----------|-------------|
+| OS | Linux 64-bit or Windows 11 64-bit |
+| GPU | NVIDIA GPU with ≥ 12 GB VRAM (RTX 3080 or better recommended) |
+| RAM | ≥ 32 GB |
+| Storage | ≥ 30 GB free (REQUIRED for IsaacSim and conda environment)|
+| NVIDIA Driver | ≥ 528.33 |
+| Python | 3.11.x (REQUIRED for latest IsaacSim) |
+| Conda | Miniconda (recommended) |
 
 ---
 
-## Running Experiments
-
-Train each reward configuration from the `scripts/` directory. Replace `<config>` with `baseline`, `effort`, or `effort_jerk`.
-
-```bash
-./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-<config> --num_envs 4096
-```
-
-To run all three configurations sequentially:
-```bash
-for cfg in baseline effort effort_jerk; do
-    ./isaaclab.sh -p scripts/train.py --task FrankaCubeGrasp-$cfg --num_envs 4096
-done
-```
-
-Training logs and checkpoints are saved to `logs/` by default.
-
----
-
-## Visualisation
-
-After training, generate comparison plots using the scripts in `visualisation/`:
-
-```bash
-python visualisation/plot_results.py --log_dir logs/
-```
-
-Pre-generated plots from thesis runs are available in `thesis_plots/baseline/`.
-
----
+## Setup Instructions
+Detailed setup instructions are provided in [SETUP_GUIDE.md](./SETUP_GUIDE.md). Follow the steps to install Isaac Sim, set up the conda environment, and run the training scripts for each reward configuration.
 
 ## Results
 
