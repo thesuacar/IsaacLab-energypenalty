@@ -13,12 +13,12 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LOG_BASE = os.path.expanduser("~/IsaacLab-energypenalty/logs/rl_games/franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\user\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
-    "Seed 42":  "joineffort42",
-    "Seed 123": "joineffort123",
-    "Seed 456": "joineffort456",
+    "Seed 42":  "jointeffort42",
+    "Seed 123": "jointeffort123",
+    "Seed 456": "jointeffort456",
 }
 
 # Metrics to plot — (TensorBoard tag, plot title, y-axis label)
@@ -33,7 +33,7 @@ METRICS = [
     ("Episode/Curriculum/joint_vel",                "Curriculum: Joint Velocity Weight", "Weight"),
 ]
 
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "joineffort")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "jointeffort")
 COLORS     = ["#4C72B0", "#DD8452", "#55A868"]   # blue, orange, green
 SMOOTH_WEIGHT = 0.85
 

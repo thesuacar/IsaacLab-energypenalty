@@ -222,13 +222,14 @@ IsaacLab-energypenalty\
 │               ├── train.py          ← Main training entry point
 │               └── play.py           ← Policy evaluation / playback
 ├── source\                       ← Isaac Lab source & task definitions
-├── thesis_plots\                 ← Pre-generated plots from thesis runs (for reference)
-|   ├── baseline\          ← Baseline reward config results
-|   ├── jointeffort\       ← Joint effort penalty config results
-|   └── jointeffortjerk\   ← Effort + jerk penalty
-├── visualisation\
+├── evaluation\
+|   ├── thesis_plots\                 ← Pre-generated plots from thesis runs (for reference)
+|   |   ├── baseline\          ← Baseline reward config results
+|   |   ├── jointeffort\       ← Joint effort penalty config results
+|   |   └── jointeffortjerk\   ← Effort + jerk penalty
 │   ├── evaluate_energy.py  ← Script to calculate energy proxy metrics from logs
 |   ├── plot_baseline.py       ← Plotting script for baseline results
 |   ├── plot_effort.py         ← Plotting script for joint effort penalty results
 |   └── plot_effortjerk.py     ← Plotting script for joint effort + jerk penalty 
+
 ```

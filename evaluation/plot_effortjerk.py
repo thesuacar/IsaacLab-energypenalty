@@ -18,7 +18,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LOG_BASE = os.path.expanduser("~/IsaacLab-energypenalty/logs/rl_games/franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\user\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "jointeffortjerk42",

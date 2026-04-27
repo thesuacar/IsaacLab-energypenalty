@@ -22,6 +22,9 @@
 **/*.pyc
 **/*.pb
 
+#virtual environment
+**/env_isaaclab/
+
 # Docker/Singularity
 **/*.sif
 docker/cluster/exports/

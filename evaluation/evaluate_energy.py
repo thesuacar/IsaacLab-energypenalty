@@ -162,7 +162,7 @@ results = {
     "episode_energies":  episode_energies,
     "episode_successes": episode_successes,
 }
-out_path = os.path.join(output_dir, f"{args_cli.label}.json")
+out_path = os.path.join(output_dir, f"{args_cli.label}_energyproxy.json")
 with open(out_path, "w") as f:
     json.dump(results, f, indent=2)
 
