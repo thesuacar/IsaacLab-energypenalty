@@ -18,12 +18,14 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LOG_BASE = os.path.expanduser("C:\\Users\\user\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\Rei\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "jointeffortjerk42",
     "Seed 123": "jointeffortjerk123",
     "Seed 456": "jointeffortjerk456",
+    "Seed 789": "jointeffortjerk789",
+    "Seed 999": "jointeffortjerk999"
 }
 
 # Metrics to plot — (TensorBoard tag, plot title, y-axis label)
@@ -40,7 +42,9 @@ METRICS = [
 ]
 
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "jointeffortjerk")
-COLORS     = ["#4C72B0", "#DD8452", "#55A868"]   # blue, orange, green
+# 5 visually distinct, colorblind-friendly colors — one per seed
+COLORS = ["#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B2"]
+#          blue        orange      green      red         purple
 SMOOTH_WEIGHT = 0.85
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

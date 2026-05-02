@@ -58,6 +58,9 @@ conda activate env_isaaclab
 
 > You should now see `(env_isaaclab)` at the start of your prompt. Always activate this environment before running any commands in this tutorial.
 
+Troubleshooting: If conda cannot be found, try in powershell:
+`<path to conda.exe in miniconda/anaconda> init powershell`
+then test conda again.
 ---
 
 ## Step 5 — Install Isaac Lab Extensions
@@ -85,8 +88,8 @@ You should see the list of available flags printed without errors.
 If `isaaclab.bat` cannot find Isaac Sim automatically, create a symbolic link manually. To resolve this common error, run this in **Command Prompt as Administrator**:
 
 ```bat
-:: Replace the path below with your actual Isaac Sim installation path
-mklink /D _isaac_sim "C:\Users\<YourName>\AppData\Local\ov\pkg\isaac-sim-4.5.0"
+:: Replace the path below with your actual Isaac Sim installation path, using Command Prompt and Administrator
+mklink /D "<path to your working folder>" "<path to isaacsim installation>"
 ```
 
 Then re-run Step 5.
@@ -114,30 +117,26 @@ Make sure your conda environment is activated (`conda activate env_isaaclab`) be
 ### Baseline (no energy penalty)
 
 ```bat
-isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-v0 --headless
+isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-v0 --headless --seed <n> --num_envs 4096
 ```
 
 ### With Joint Effort Penalty
 
 ```bat
-isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffort-v0 --headless
+isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffort-v0 --headless --seed <n> --num_envs 4096
 ```
 
 ### With Effort + Jerk Penalty
 
 ```bat
-isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffortAndJerk-v0 --headless
+isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffortAndJerk-v0 --headless --seed <n> --num_envs 4096
 ```
 
 > Remove `--headless` if you want to watch the simulation in the GUI — but headless mode trains significantly faster and prevents "Not Responding" error.
 
 **For reproducibility, always fix the random seed:**
 
-```bat
-isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-v0 --headless --seed 42
-```
-
-> The default seed is 42. The experiment uses 3 seeds throughout different conditions: 42,123,456.
+> The default seed is 42. The experiment uses 5 seeds throughout different conditions: 42, 123, 456, 789, 999.
 
 **To stop training:** press `Ctrl+Break` (or `Ctrl+Fn+B` on laptops). Do **not** use `Ctrl+C` on Windows, as it may leave background processes running.
 
@@ -186,6 +185,9 @@ Replace `<timestamp>` and `<iteration>` with the actual folder name and checkpoi
 ## Step 11 — Visualise Results
 
 The `evaluation\` folder contains the plotting and energy proxy calculation scripts used for the thesis figures.
+
+Troubleshooting: install matplotlib into your environment via powershell if not already installed:
+`pip install matplotlib`
 
 ```bat
 cd ~/IsaacLab

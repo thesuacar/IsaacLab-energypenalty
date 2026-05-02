@@ -51,7 +51,7 @@ class FrankaLiftJointEffortRewardsCfg(RewardsCfg):
 
     joint_effort = RewTerm(
         func=rewards.joint_torques_l2,  # penalises L2 norm of applied joint torques
-        weight=-1e-4,  # start small — same scale as action_rate and joint_vel
+        weight=-1e-5,  # start small — same scale as action_rate and joint_vel
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 

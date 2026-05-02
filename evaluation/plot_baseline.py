@@ -1,7 +1,7 @@
 """
 Thesis Baseline Results Plotter
 Reads TensorBoard event files from Isaac Lab training runs and produces
-publication-ready comparison graphs for all 3 seeds.
+publication-ready comparison graphs for all 5 seeds.
 
 Usage:
     python plot_baseline.py
@@ -19,12 +19,14 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 # ── Configuration ────────────────────────────────────────────────────────────
 
 # Update these paths if your folder names are different
-LOG_BASE = os.path.expanduser("C:\\Users\\user\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\Rei\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "baseline42",
     "Seed 123": "baseline123",
     "Seed 456": "baseline456",
+    "Seed 789": "baseline789",
+    "Seed 999": "baseline999"
 }
 
 # Metrics to plot — (TensorBoard tag, plot title, y-axis label)
@@ -39,7 +41,11 @@ METRICS = [
 ]
 
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_plots", "baseline")
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]  # blue, orange, green
+
+# 5 visually distinct, colorblind-friendly colors — one per seed
+COLORS = ["#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B2"]
+#          blue        orange      green      red         purple
+
 SMOOTH_WEIGHT = 0.85  # exponential moving average smoothing (0=none, 0.99=max)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -137,11 +143,11 @@ def main():
         std  = np.std(all_values, axis=0)
 
         fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(ref_steps, mean, color="#4C72B0", linewidth=2.5, label="Mean (3 seeds)")
+        ax.plot(ref_steps, mean, color="#4C72B0", linewidth=2.5, label="Mean (5 seeds)")
         ax.fill_between(ref_steps, mean - std, mean + std,
                         color="#4C72B0", alpha=0.25, label="± 1 std dev")
 
-        ax.set_title("Baseline — Total Reward (Mean ± Std, 3 Seeds)", fontsize=14, fontweight="bold")
+        ax.set_title("Baseline — Total Reward (Mean ± Std, 5 Seeds)", fontsize=14, fontweight="bold")
         ax.set_xlabel("Epoch", fontsize=12)
         ax.set_ylabel("Reward", fontsize=12)
         ax.legend(fontsize=11)
