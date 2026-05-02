@@ -78,7 +78,7 @@ gym.register(
 
 '''
 INSERT HERE YOUR OWN CONFIGURATIONS TO REGISTER THEM AS GYM ENVIRONMENTS.
-Su Acar, 2026, Thesis, Tilburg University'''
+'''
 
 ##
 # Config 2 — Joint Effort Penalty

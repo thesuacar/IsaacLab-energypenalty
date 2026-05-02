@@ -22,8 +22,10 @@
 #   - object_goal_tracking_fine     (weight: +5.0)   [inherited from baseline]
 #   - action_rate                   (weight: -1e-4)  [inherited, curriculum]
 #   - joint_vel                     (weight: -1e-4)  [inherited, curriculum]
-#   - joint_effort  (Config 2)      (weight: -1e-4)  [torque / energy penalty]
-#   - joint_acc     (NEW)           (weight: -1e-4)  [jerk / smoothness penalty]
+#   - joint_effort  (Config 2)      (weight: -1e-5)  [torque / energy penalty]
+#   - joint_acc     (NEW)           (weight: -1e-5)  [jerk / smoothness penalty]
+#weight is set lower than action_rate penalty to avoid hindering task completion, but still encourages energy-efficient motion
+#franka has 7dof with large torque range, so we need a lower weight to prevent excessive penalties that could discourage exploration and learning
 # =============================================================================
 
 from isaaclab.managers import RewardTermCfg as RewTerm
@@ -55,7 +57,7 @@ class FrankaLiftJointEffortAndJerkRewardsCfg(FrankaLiftJointEffortRewardsCfg):
 
     joint_acc = RewTerm(
         func=rewards.joint_acc_l2,   # penalises L2 norm of joint accelerations
-        weight=-1e-4,                # same scale as effort and action_rate penalties
+        weight=-1e-5,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 
