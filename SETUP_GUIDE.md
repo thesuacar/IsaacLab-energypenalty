@@ -190,8 +190,10 @@ Troubleshooting: install matplotlib into your environment via powershell if not 
 `pip install matplotlib`
 
 ```bat
-cd ~/IsaacLab
-./isaaclab.sh -p evaluate_energy.py --task Isaac-Lift-Cube-Franka-v0 --checkpoint <path to checkpoint> --label <label of output file> --num_envs 16 --num_episodes 50 --headless
+cd evaluation
+
+python evaluate_energy.py evaluate_energy.py --task <task name (e.g Isaac-Lift-Cube-Franka-v0)> --checkpoint <path to checkpoint> --label <label of output file (e.g. baselinexxx)> --num_envs 16 --num_episodes 50 --headless
+python extract_metrics.py --label <label of output file>
 
 cd evaluation
 python plot_effort.py

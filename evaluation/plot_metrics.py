@@ -6,14 +6,8 @@
 # Loads energy JSONs and TB-metrics JSONs from logs/energy_eval, groups them
 # by condition (baseline / jointeffort / jointeffortjerk), aggregates across
 # seeds, and produces thesis-quality plots.
+
 #
-# Expected files in --data_dir:
-#   Energy JSONs  : baseline42_energyproxy.json,jointeffort42_energyproxy.json, jointeffortjerk42_energyproxy.json...
-#   TB JSONs      : baseline42_tb_metrics.json, jointeffort42_tb_metrics.json, jointeffortjerk42_tb_metrics.json...
-#
-# Usage:
-#   python plot_metrics.py
-#   python plot_metrics.py --data_dir logs/energy_eval --out_dir evaluation/thesisplots
 # =============================================================================
 
 import argparse
@@ -475,8 +469,11 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Plot thesis metrics grouped by condition, aggregated across seeds."
     )
-    parser.add_argument("--data_dir", default="logs/energy_eval",
-                        help="Directory containing all JSON files.")
+    parser.add_argument(
+        "--data_dir",
+        default=r"C:\Users\Rei\IsaacLab-energypenalty\logs\metrics", #change to access your own metric logs
+        help="Directory containing all JSON files."
+    )
     parser.add_argument("--out_dir",  default="evaluation/thesis_plots",
                         help="Output directory for plots.")
     return parser.parse_args()

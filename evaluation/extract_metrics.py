@@ -123,8 +123,8 @@ def infer_success_rate(ea) -> float | None:
     except KeyError:
         return None
 
-
-DEFAULT_LOGS_ROOT = r"C:\Users\user\Desktop\IsaacLab-energypenalty\logs\rl_games\franka_lift"
+#change to fit the address of the training logs
+DEFAULT_LOGS_ROOT = r"C:\Users\Rei\IsaacLab-energypenalty\logs\rl_games\franka_lift"
 
 
 def label_to_folder_name(label: str) -> str:
