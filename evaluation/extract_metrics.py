@@ -1,36 +1,11 @@
 # =============================================================================
-# Extract Metrics from TensorBoard Events File
-# Thesis: Energy-Aware Reward Shaping for Robotic Grasping
-# Author: Su Acar, Tilburg University, 2026
-#
-# Reads a TensorBoard events file and extracts training metrics into a JSON
-# file that can be used by plot_metrics.py or inspected directly.
-#
-# Extracted metrics:
-#   - Episode rewards (reaching, lifting, goal tracking, action_rate, joint_vel)
-#   - Episode lengths
-#   - Episode terminations (time_out, object_dropping)
-#   - Position / orientation error
-#   - Training losses and entropy
-#   - Total / shaped rewards
-#
-# Usage:
-#   # Auto-discover events file from label (recommended):
-#   python extract_tb_metrics.py --label baseline_seed42
-#
-#   # With explicit logs root if your folder isn't the default:
-#   python extract_tb_metrics.py --label baseline_seed42 --logs_root C:\Users\user\Desktop\IsaacLab-energypenalty\logs\rl_games
-#
-#   # Override output dir:
-#   python extract_tb_metrics.py --label baseline_seed42 --out_dir logs\energy_eval
-#
-# Folder structure assumed:
-#   <logs_root>/<taskname><seed>/summaries/events.out.tfevents.*
-#   e.g. logs/rl_games/franka_lift/baseline42/summaries/events.out.tfevents.*
-#
-#   The label "baseline_seed42" maps to folder name "baseline42"
-#   (i.e. underscores and the word "seed" are stripped for matching).
+# Extract Metrics Script
 # =============================================================================
+'''
+Thesis: Energy-Aware Reward Shaping for Robotic Grasping
+Author: Su Acar, Tilburg University, 2026
+
+'''
 
 import argparse
 import json
@@ -124,7 +99,7 @@ def infer_success_rate(ea) -> float | None:
         return None
 
 #change to fit the address of the training logs
-DEFAULT_LOGS_ROOT = r"C:\Users\Rei\IsaacLab-energypenalty\logs\rl_games\franka_lift"
+DEFAULT_LOGS_ROOT = r"C:\Users\user\Desktop\IsaacLab-energypenalty\logs\rl_games\franka_lift"
 
 
 def label_to_folder_name(label: str) -> str:

@@ -98,14 +98,14 @@ gym.register(
 )
 
 ##
-# Config 3 — Joint Effort + Jerk Penalty
+# Config 3 — Joint Effort + Acceleration Penalty
 ##
 
 gym.register(
-    id="Isaac-Lift-Cube-Franka-JointEffortAndJerk-v0",
+    id="Isaac-Lift-Cube-Franka-JointEffortAndAcceleration-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     kwargs={
-        "env_cfg_entry_point": f"{__name__}.joint_effort_and_jerk_env_cfg:FrankaCubeLiftJointEffortAndJerkEnvCfg",
+        "env_cfg_entry_point": f"{__name__}.joint_effort_and_acceleration_env_cfg:FrankaCubeLiftJointEffortAndAccelerationEnvCfg",
         "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:LiftCubePPORunnerCfg",
         "skrl_cfg_entry_point": f"{agents.__name__}:skrl_ppo_cfg.yaml",

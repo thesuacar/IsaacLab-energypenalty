@@ -1,14 +1,11 @@
-"""
-Thesis Baseline Results Plotter
-Reads TensorBoard event files from Isaac Lab training runs and produces
-publication-ready comparison graphs for all 5 seeds.
+# =============================================================================
+# Plotting script for Config 1 (Baseline) metrics from TensorBoard logs.
+# =============================================================================
+'''
+Thesis: Energy-Aware Reward Shaping for Robotic Grasping
+Author: Su Acar, Tilburg University, 2026
 
-Usage:
-    python plot_baseline.py
-
-Output:
-    A folder called 'thesis_plots/' with PNG files for each metric.
-"""
+'''
 
 import os
 import numpy as np
@@ -19,7 +16,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 # ── Configuration ────────────────────────────────────────────────────────────
 
 # Update these paths if your folder names are different
-LOG_BASE = os.path.expanduser("C:\\Users\\Rei\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\User\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "baseline42",

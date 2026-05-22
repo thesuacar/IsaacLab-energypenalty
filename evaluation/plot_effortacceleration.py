@@ -1,14 +1,11 @@
-"""
-Config 3 — Joint Effort and Jerk Penalty Results Plotter
-Reads TensorBoard event files from Isaac Lab training runs and produces
-publication-ready comparison graphs for all 3 seeds.
+# =============================================================================
+# Plotting script for Config 3 (Joint Effort + Acceleration) results
+# =============================================================================
+'''
+Thesis: Energy-Aware Reward Shaping for Robotic Grasping
+Author: Su Acar, Tilburg University, 2026
 
-Usage:
-    python plot_config3.py
-
-Output:
-    Plots saved to ~/IsaacLab/thesis_plots/config3/
-"""
+'''
 
 import os
 import numpy as np
@@ -18,7 +15,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LOG_BASE = os.path.expanduser("C:\\Users\\Rei\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\User\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "jointeffortjerk42",
@@ -82,7 +79,7 @@ def plot_metric(tag, title, ylabel, runs_data):
         ax.plot(steps, values,        color=color, alpha=0.15, linewidth=0.8)
         ax.plot(steps, smooth(values), color=color, linewidth=2.0, label=label)
 
-    ax.set_title(f"Config 3 (Joint Effort + Jerk) — {title}", fontsize=14, fontweight="bold")
+    ax.set_title(f"Config 3 (Joint Effort + Acceleration) — {title}", fontsize=14, fontweight="bold")
     ax.set_xlabel("Epoch", fontsize=12)
     ax.set_ylabel(ylabel, fontsize=12)
     ax.legend(fontsize=11)
@@ -137,7 +134,7 @@ def main():
         ax.plot(ref_steps, mean, color="#4C72B0", linewidth=2.5, label="Mean (3 seeds)")
         ax.fill_between(ref_steps, mean - std, mean + std,
                         color="#4C72B0", alpha=0.25, label="± 1 std dev")
-        ax.set_title("Config 3 (Joint Effort + Jerk) — Total Reward (Mean ± Std, 3 Seeds)",
+        ax.set_title("Config 3 (Joint Effort + Acceleration) — Total Reward (Mean ± Std, 3 Seeds)",
                      fontsize=14, fontweight="bold")
         ax.set_xlabel("Epoch", fontsize=12)
         ax.set_ylabel("Reward", fontsize=12)

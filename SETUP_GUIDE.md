@@ -1,7 +1,7 @@
 # Reproducibility Tutorial — Windows 11 + Conda
 ## Energy-Aware Reward Shaping for Robotic Grasping in Isaac Lab
 **Repository:** https://github.com/thesuacar/IsaacLab-energypenalty  
-**Robot:** Franka Emika Panda | **Algorithm:** PPO (via RSL-RL) | **Simulator:** NVIDIA Isaac Lab  
+**Robot:** Franka Emika Panda | **Algorithm:** PPO (via rl_games) | **Simulator:** NVIDIA Isaac Lab  
 **Platform:** Windows 11 (64-bit) | **Environment manager:** Miniconda
 
 ---
@@ -65,7 +65,7 @@ then test conda again.
 
 ## Step 5 — Install Isaac Lab Extensions
 
-With the conda environment active, install all Isaac Lab extensions and RL frameworks (RSL-RL, RL Games, SKRL, Stable Baselines3):
+With the conda environment active, install all Isaac Lab extensions and RL frameworks (RSL-RL, RL Games, SKRL, Stable Baselines3), we will only use RL Games for this thesis but the others are available for future experimentation:
 
 ```bat
 isaaclab.bat --install
@@ -104,9 +104,10 @@ This thesis compares three reward setups for the Franka Panda grasping task:
 |--------|-------------|
 | **Baseline** | Grasp success reward only |
 | **Effort Penalty** | Grasp success + integrated joint torque penalty |
-| **Effort + Jerk Penalty** | Grasp success + torque penalty + motion smoothness (jerk) penalty |
+| **Effort + Acceleration Penalty** | Grasp success + torque penalty + motion smoothness (jerk) penalty |
 
 Pre-generated result plots from the thesis runs are in the `thesis_plots\` folder.
+Videos of trained policies are in `logs\rl_games\franka_lift\<taskname>42\videos\`.
 
 ---
 
@@ -126,13 +127,14 @@ isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Li
 isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffort-v0 --headless --seed <n> --num_envs 4096
 ```
 
-### With Effort + Jerk Penalty
+### With Effort + Acceleration Penalty
 
 ```bat
-isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffortAndJerk-v0 --headless --seed <n> --num_envs 4096
+isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Lift-Cube-Franka-JointEffortAndAcceleration-v0 --headless --seed <n> --num_envs 4096
 ```
 
 > Remove `--headless` if you want to watch the simulation in the GUI — but headless mode trains significantly faster and prevents "Not Responding" error.
+> Note: in some folder names, comments, and plot labels, "JointEffortAndJerk" may be used instead of "JointEffortAndAcceleration" due to an earlier naming choice. These refer to the same Config 3 with the acceleration penalty. This was later renamed for clarity but some legacy names remain in the codebase. Please be wary of name errors when navigating the code and logs.
 
 **For reproducibility, always fix the random seed:**
 
@@ -148,6 +150,7 @@ Training logs are saved to:
 ```
 logs\rl_games\franka_lift\<timestamp>\
 ```
+You can rename it later for clarity (e.g. `logs\rl_games\franka_lift\baseline42\`) but keep the internal structure intact for TensorBoard compatibility.
 
 Each run produces:
 - `params\` — environment and agent config snapshots
@@ -175,10 +178,10 @@ Key metrics to watch:
 After training, load a saved checkpoint and run the policy:
 
 ```bat
-.\isaaclab.bat -p scripts/reinforcement_learning/rl_games/play.py --task <taskname> --num_envs 1 --video --video_length 300 --checkpoint logs/rl_games/franka_lift/<timestamp>/nn/<iteration>.pt
+.\isaaclab.bat -p scripts/reinforcement_learning/rl_games/play.py --task <taskname> --num_envs 1 --video --video_length 300 --checkpoint logs/rl_games/franka_lift/<timestamp>/nn/<iteration>.pt 
 ```
 
-Replace `<timestamp>` and `<iteration>` with the actual folder name and checkpoint file from your run. Task names are specified in the `--task` argument also during training. This launches the simulation GUI so you can visually inspect the robot's motion and record evaluation metrics. A video (`.mp4`) is saved to `logs\rl_games\franka_lift\<timestamp>\videos\` for later review.
+Replace `<timestamp>` and `<iteration>` with the actual folder name and checkpoint file from your run. Task names are specified in the `--task` argument also during training. This launches the simulation GUI so you can visually inspect the robot's motion and record evaluation metrics. If your computer is not powerful enough, use the headless mode (--headless). Regardless, a video (`.mp4`) is saved to `logs\rl_games\franka_lift\<timestamp>\videos\` for later review.
 
 ---
 
@@ -186,8 +189,8 @@ Replace `<timestamp>` and `<iteration>` with the actual folder name and checkpoi
 
 The `evaluation\` folder contains the plotting and energy proxy calculation scripts used for the thesis figures.
 
-Troubleshooting: install matplotlib into your environment via powershell if not already installed:
-`pip install matplotlib`
+Troubleshooting: install packages required into your environment via powershell if not already installed:
+`pip install numpy matplotlib tensorboard`
 
 ```bat
 cd evaluation
@@ -197,23 +200,17 @@ python extract_metrics.py --label <label of output file>
 
 cd evaluation
 python plot_effort.py
-python plot_effortjerk.py
+python plot_effortacceleration.py
 python plot_baseline.py
+python plot_metrics.py
 ```
 
-This generates comparison figures for:
-- Total Reward per Iteration
-- Lifting Object Reward
-- Reaching Object Reward
-- Action Rate Penalty
-- Joint Velocity Penalty
-- Curriculum: Action Rate Weight
-- Curriculum: Joint Velocity Weight
-- Average energy usage (integrated joint torque) per episode
+This generates comparison figures for success metrics, energy proxies, and training curves across the three reward configurations.
 
-Plots are saved to `thesis_plots\` for reference. You can modify the plotting scripts to generate custom visualisations or compare different runs.
+there are plots are saved to `thesis_plots\` for reference. You can modify the plotting scripts to generate custom visualisations or compare different runs.
 ---
 
+The codebase contains training logs, plots, videos and scripts for all three reward configurations, results from the thesis experiment, for your reference.
 
 ## File Structure Reference
 
@@ -230,10 +227,10 @@ IsaacLab-energypenalty\
 |   ├── thesis_plots\                 ← Pre-generated plots from thesis runs (for reference)
 |   |   ├── baseline\          ← Baseline reward config results
 |   |   ├── jointeffort\       ← Joint effort penalty config results
-|   |   └── jointeffortjerk\   ← Effort + jerk penalty
+|   |   └── jointeffortacceleration\   ← Effort + acceleration penalty
 │   ├── evaluate_energy.py  ← Script to calculate energy proxy metrics from logs
 |   ├── plot_baseline.py       ← Plotting script for baseline results
 |   ├── plot_effort.py         ← Plotting script for joint effort penalty results
-|   └── plot_effortjerk.py     ← Plotting script for joint effort + jerk penalty 
+|   └── plot_effortacceleration.py     ← Plotting script for joint effort + acceleration penalty 
 
 ```

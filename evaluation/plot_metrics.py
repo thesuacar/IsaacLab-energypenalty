@@ -1,14 +1,11 @@
 # =============================================================================
-# Plot Metrics Script
-# Thesis: Energy-Aware Reward Shaping for Robotic Grasping
-# Author: Su Acar, Tilburg University, 2026
-#
-# Loads energy JSONs and TB-metrics JSONs from logs/energy_eval, groups them
-# by condition (baseline / jointeffort / jointeffortjerk), aggregates across
-# seeds, and produces thesis-quality plots.
-
-#
+# Plotting script for thesis evaluation metrics from JSON logs.
 # =============================================================================
+'''
+Thesis: Energy-Aware Reward Shaping for Robotic Grasping
+Author: Su Acar, Tilburg University, 2026
+
+'''
 
 import argparse
 import json
@@ -31,7 +28,7 @@ CONDITIONS = ["baseline", "jointeffort", "jointeffortjerk"]
 CONDITION_LABELS = {
     "baseline":         "Baseline",
     "jointeffort":      "Joint Effort",
-    "jointeffortjerk":  "Joint Effort + Jerk",
+    "jointeffortjerk":  "Joint Effort + Acceleration",
 }
 
 PALETTE = {
@@ -57,7 +54,7 @@ def identify_condition(filename: str):
 
 
 def load_all(data_dir: str):
-    data_dir = Path(os.path.expanduser(data_dir))
+    data_dir = Path(r"C:\Users\user\Desktop\IsaacLab-energypenalty\logs\energy_eval") #change to access your own metric logs
     if not data_dir.exists():
         sys.exit(f"[ERROR] Data directory not found: {data_dir}")
 
@@ -471,10 +468,10 @@ def parse_args():
     )
     parser.add_argument(
         "--data_dir",
-        default=r"C:\Users\Rei\IsaacLab-energypenalty\logs\metrics", #change to access your own metric logs
+        default=r"C:\Users\user\Desktop\IsaacLab-energypenalty\logs\metrics", #change to access your own metric logs
         help="Directory containing all JSON files."
     )
-    parser.add_argument("--out_dir",  default="evaluation/thesis_plots",
+    parser.add_argument("--out_dir",  default="thesis_plots",
                         help="Output directory for plots.")
     return parser.parse_args()
 

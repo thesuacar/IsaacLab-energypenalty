@@ -1,10 +1,11 @@
-"""
-Config 2 — Joint Effort Penalty Results Plotter
-Reads TensorBoard event files from Isaac Lab training runs and produces
-publication-ready comparison graphs for all 3 seeds.
+# =============================================================================
+# Plotting script for Config 2 (Joint Effort) metrics from TensorBoard logs.
+# =============================================================================
+'''
+Thesis: Energy-Aware Reward Shaping for Robotic Grasping
+Author: Su Acar, Tilburg University, 2026
 
-"""
-
+'''
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,7 +15,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 #edit the path to where your logs were saved
-LOG_BASE = os.path.expanduser("C:\\Users\\Rei\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
+LOG_BASE = os.path.expanduser("C:\\Users\\User\\Desktop\\IsaacLab-energypenalty\\logs\\rl_games\\franka_lift")
 
 RUNS = {
     "Seed 42":  "jointeffort42",
