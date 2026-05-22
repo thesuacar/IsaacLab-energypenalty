@@ -216,7 +216,7 @@ print("=" * 60 + "\n")
 
 # ── Save ──────────────────────────────────────────────────────────────────────
 
-output_dir = os.path.expanduser("~/IsaacLab/thesis_plots/energy_eval")
+output_dir = os.path.expanduser("~/IsaacLab-energypenalty/logs/energy_eval")
 os.makedirs(output_dir, exist_ok=True)
 out_path = os.path.join(output_dir, f"{args_cli.label}.json")
 

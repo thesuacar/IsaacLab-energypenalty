@@ -22,12 +22,14 @@ This repository is a fork of [isaac-sim/IsaacLab](https://github.com/isaac-sim/I
 
 Most reinforcement learning approaches for robotic manipulation optimise purely for task success. This project embeds simple, simulation-based energy proxies directly into the reward signal to investigate whether efficiency can be improved without significantly reducing grasp performance.
 
-**Research question:** How can energy-aware reward shaping influence learning efficiency, task success rate, and energy consumption of a Franka Panda arm in object-grasping tasks?
+**Research question:** How can energy-aware reward shaping in reinforcement learning influence the task success rate and energy consumption of a robotic system, specifically a Franka Emika Panda arm, in performing object-grasping tasks?
+
 
 **Metrics tracked per configuration:**
 - Grasp success rate (% of episodes with a stable, completed grasp)
 - Learning speed (training steps to reach a stable success-rate threshold)
-- Energy proxy (average integrated joint torque + jerk per episode)
+- Energy proxy (the sum of the L2 norm of applied joint torques across all timesteps)
+- True energy consumption (estimated from torque and joint velocity) (the sum of the absolute dot product of joint torques and joint velocities across all timesteps)
 
 ---
 
@@ -37,7 +39,7 @@ Most reinforcement learning approaches for robotic manipulation optimise purely 
 |----|------|-------------|
 | **C1** | Baseline | Grasp success reward only |
 | **C2** | Effort penalty | Grasp success + integrated joint-torque penalty |
-| **C3** | Effort + jerk penalty | Grasp success + joint-torque penalty + jerk-based smoothness penalty |
+| **C3** | Effort + acceleration penalty | Grasp success + joint-torque penalty + acceleration-based smoothness penalty |
 
 Each configuration is trained multiple times to reduce variance. Averaged results are used for comparison.
 
@@ -63,7 +65,7 @@ Detailed setup instructions are provided in [SETUP_GUIDE.md](./SETUP_GUIDE.md). 
 
 ## Results
 
-Full results, training curves, and analysis are presented in the thesis document. The `thesis_plots/` directory contains the figures used in the final report.
+Full results, training curves, and analysis are presented in the thesis document. The `thesis_plots/` directory contains the figures used in the final report. Training logs and videos are also saved for your reference.
 
 ---
 

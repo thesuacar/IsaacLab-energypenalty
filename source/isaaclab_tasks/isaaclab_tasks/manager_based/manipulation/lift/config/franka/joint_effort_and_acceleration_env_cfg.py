@@ -10,10 +10,15 @@
 # =============================================================================
 #
 # This configuration extends Config 2 by adding a joint acceleration penalty
-# (jerk proxy) on top of the joint effort penalty. Joint acceleration is the
+# on top of the joint effort penalty. Joint acceleration is the
 # rate of change of joint velocity, which serves as a proxy for motion
-# smoothness. High accelerations correspond to jerky, energy-inefficient
-# movements. Penalising this term encourages the robot to move more smoothly.
+# smoothness. The joint acceleration penalty discourages abrupt changes in joint 
+# velocity, encouraging more gradual and controlled motion profiles.
+#
+# Note: While joint acceleration is sometimes referred to as a jerk proxy in the 
+# codebase comments, the metric computed is strictly the L2 norm of joint 
+# accelerations, not the derivative of acceleration. The term jerk is therefore 
+# avoided in this thesis in favor of the more precise designation.
 #
 # Reward terms:
 #   - reaching_object               (weight: +1.0)   [inherited from baseline]
@@ -23,7 +28,7 @@
 #   - action_rate                   (weight: -1e-4)  [inherited, curriculum]
 #   - joint_vel                     (weight: -1e-4)  [inherited, curriculum]
 #   - joint_effort  (Config 2)      (weight: -1e-5)  [torque / energy penalty]
-#   - joint_acc     (NEW)           (weight: -1e-5)  [jerk / smoothness penalty]
+#   - joint_acc     (NEW)           (weight: -1e-5)  [acceleration / smoothness penalty]
 # =============================================================================
 
 from isaaclab.managers import RewardTermCfg as RewTerm
@@ -43,7 +48,7 @@ from .joint_effort_env_cfg import (
 # =============================================================================
 
 @configclass
-class FrankaLiftJointEffortAndJerkRewardsCfg(FrankaLiftJointEffortRewardsCfg):
+class FrankaLiftJointEffortAndAccelerationRewardsCfg(FrankaLiftJointEffortRewardsCfg):
     """Extends Config 2 rewards with a joint acceleration (jerk) penalty.
 
     Joint acceleration is the rate of change of joint velocity. High
@@ -65,8 +70,8 @@ class FrankaLiftJointEffortAndJerkRewardsCfg(FrankaLiftJointEffortRewardsCfg):
 # =============================================================================
 
 @configclass
-class FrankaCubeLiftJointEffortAndJerkEnvCfg(FrankaCubeLiftJointEffortEnvCfg):
-    """Franka lift environment with joint effort + jerk penalty (Config 3).
+class FrankaCubeLiftJointEffortAndAccelerationEnvCfg(FrankaCubeLiftJointEffortEnvCfg):
+    """Franka lift environment with joint effort + acceleration penalty (Config 3).
 
     Identical to Config 2 except the reward function now additionally
     includes a joint acceleration penalty to further encourage smooth,
@@ -77,12 +82,12 @@ class FrankaCubeLiftJointEffortAndJerkEnvCfg(FrankaCubeLiftJointEffortEnvCfg):
         # initialise everything from Config 2 first
         super().__post_init__()
 
-        # replace the rewards with our effort + jerk version
-        self.rewards = FrankaLiftJointEffortAndJerkRewardsCfg()
+        # replace the rewards with our effort + acceleration version
+        self.rewards = FrankaLiftJointEffortAndAccelerationRewardsCfg()
 
 
 @configclass
-class FrankaCubeLiftJointEffortAndJerkEnvCfg_PLAY(FrankaCubeLiftJointEffortAndJerkEnvCfg):
+class FrankaCubeLiftJointEffortAndAccelerationEnvCfg_PLAY(FrankaCubeLiftJointEffortAndAccelerationEnvCfg):
     """Play version of Config 3 — smaller scene, no randomisation."""
 
     def __post_init__(self):

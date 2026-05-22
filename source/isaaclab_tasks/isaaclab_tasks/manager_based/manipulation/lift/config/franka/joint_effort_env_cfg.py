@@ -21,8 +21,8 @@
 #   - object_goal_tracking          (weight: +16.0)  [inherited from baseline]
 #   - object_goal_tracking_fine     (weight: +5.0)   [inherited from baseline]
 #   - action_rate                   (weight: -1e-4)  [inherited, curriculum]
-#   - joint_vel                     (weight: -1e-4)  [inherited, curriculum]
-#   - joint_effort  (NEW)           (weight: -1e-4)  [energy penalty]
+#   - joint_vel                     (weight: -1e-5)  [inherited, curriculum]
+#   - joint_effort  (NEW)           (weight: -1e-5)  [energy penalty]
 # =============================================================================
 
 from isaaclab.managers import RewardTermCfg as RewTerm
