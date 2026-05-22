@@ -29,7 +29,7 @@ Isaac Lab runs on top of Isaac Sim. Install it via the official guide: https://d
 
 ---
 
-## Step 3 — Install Git and Clone the Repository
+## Step 2 — Install Git and Clone the Repository
 
 Open powershell and run:
 
@@ -40,7 +40,7 @@ cd IsaacLab-energypenalty
 
 ---
 
-## Step 4 — Create the Conda Environment
+## Step 3 — Create the Conda Environment
 
 Isaac Sim requires **Python 3.11**. Create a dedicated conda environment using the `isaaclab.bat` helper script:
 
@@ -63,7 +63,7 @@ Troubleshooting: If conda cannot be found, try in powershell:
 then test conda again.
 ---
 
-## Step 5 — Install Isaac Lab Extensions
+## Step 4 — Install Isaac Lab Extensions
 
 With the conda environment active, install all Isaac Lab extensions and RL frameworks (RSL-RL, RL Games, SKRL, Stable Baselines3), we will only use RL Games for this thesis but the others are available for future experimentation:
 
@@ -83,7 +83,7 @@ You should see the list of available flags printed without errors.
 
 ---
 
-## Step 6 — Link Isaac Sim (if not already linked)
+## Step 5 — Link Isaac Sim (if not already linked)
 
 If `isaaclab.bat` cannot find Isaac Sim automatically, create a symbolic link manually. To resolve this common error, run this in **Command Prompt as Administrator**:
 
@@ -92,11 +92,11 @@ If `isaaclab.bat` cannot find Isaac Sim automatically, create a symbolic link ma
 mklink /D "<path to your working folder>" "<path to isaacsim installation>"
 ```
 
-Then re-run Step 5.
+Then re-run Step 4.
 
 ---
 
-## Step 7 — Understand the Three Reward Configurations
+## Step 6 — Understand the Three Reward Configurations
 
 This thesis compares three reward setups for the Franka Panda grasping task:
 
@@ -111,7 +111,7 @@ Videos of trained policies are in `logs\rl_games\franka_lift\<taskname>42\videos
 
 ---
 
-## Step 8 — Run Training
+## Step 7 — Run Training
 
 Make sure your conda environment is activated (`conda activate env_isaaclab`) before every session.
 
@@ -144,7 +144,7 @@ isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-Li
 
 ---
 
-## Step 9 — Monitor Training with TensorBoard
+## Step 8 — Monitor Training with TensorBoard
 
 Training logs are saved to:
 ```
@@ -173,7 +173,7 @@ Key metrics to watch:
 
 ---
 
-## Step 10 — Evaluate a Trained Policy
+## Step 9 — Evaluate a Trained Policy
 
 After training, load a saved checkpoint and run the policy:
 
@@ -185,7 +185,7 @@ Replace `<timestamp>` and `<iteration>` with the actual folder name and checkpoi
 
 ---
 
-## Step 11 — Visualise Results
+## Step 10 — Visualise Results
 
 The `evaluation\` folder contains the plotting and energy proxy calculation scripts used for the thesis figures.
 
@@ -195,7 +195,7 @@ Troubleshooting: install packages required into your environment via powershell 
 ```bat
 cd evaluation
 
-python evaluate_energy.py evaluate_energy.py --task <task name (e.g Isaac-Lift-Cube-Franka-v0)> --checkpoint <path to checkpoint> --label <label of output file (e.g. baselinexxx)> --num_envs 16 --num_episodes 50 --headless
+python evaluate_energy.py --task <task name (e.g Isaac-Lift-Cube-Franka-v0)> --checkpoint <path to checkpoint> --label <label of output file (e.g. baselinexxx)> --num_envs 16 --num_episodes 50 --headless
 python extract_metrics.py --label <label of output file>
 
 cd evaluation
@@ -219,18 +219,15 @@ IsaacLab-energypenalty\
 ├── scripts\
 │   └── reinforcement_learning\
 │       └── rl_games\
-|           └── franka_lift\                 ← PPO training scripts for Franka Lift task
-│               ├── train.py          ← Main training entry point
-│               └── play.py           ← Policy evaluation / playback
-├── source\                       ← Isaac Lab source & task definitions
-├── evaluation\
+│              ├── train.py          ← Main training entry point
+│              └── play.py           ← Policy evaluation / playback
+├── source\                          ← Isaac Lab source & task definitions
+|   ├── isaaclab_tasks/isaaclab_tasks/manager_based/manipulation\lift\config\franka ← Task definitions for the three rewards
+├── evaluation\                 ← Evaluation and plotting scripts
 |   ├── thesis_plots\                 ← Pre-generated plots from thesis runs (for reference)
 |   |   ├── baseline\          ← Baseline reward config results
 |   |   ├── jointeffort\       ← Joint effort penalty config results
 |   |   └── jointeffortacceleration\   ← Effort + acceleration penalty
-│   ├── evaluate_energy.py  ← Script to calculate energy proxy metrics from logs
-|   ├── plot_baseline.py       ← Plotting script for baseline results
-|   ├── plot_effort.py         ← Plotting script for joint effort penalty results
-|   └── plot_effortacceleration.py     ← Plotting script for joint effort + acceleration penalty 
+├── logs\rl_games\franka_lift\       ← Training logs, checkpoints, videos (one folder per run)
 
 ```

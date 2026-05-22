@@ -1,6 +1,6 @@
 # IsaacLab — Energy-Penalty Extension
 
-> **Thesis project** — *How do different energy-efficient reward functions impact the learning speed and success rate of robotic systems in grasping tasks?*
+> **Thesis project** — *Effects of Joint Torque and Acceleration Penalties on Grasp Success and Energy Efficiency in Reinforcement Learning*
 > Su Acar · Tilburg University · Cognitive Science & Artificial Intelligence · 2026
 
 This repository is a fork of [isaac-sim/IsaacLab](https://github.com/isaac-sim/IsaacLab) extended with energy-aware reward shaping for robotic grasping research. It trains a **Franka Emika Panda** arm using **Proximal Policy Optimization (PPO)** and compares three reward configurations that progressively introduce energy-consumption penalties derived from joint torque and motion smoothness (jerk).
